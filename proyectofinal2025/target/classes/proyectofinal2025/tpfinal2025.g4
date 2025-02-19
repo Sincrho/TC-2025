@@ -90,7 +90,7 @@ bloque: LLAVE_APER instrucciones LLAVE_CIER;
 // Declaraciones de variables numericas
 declaracion: tipo_de_dato ID declaracion_multiple;
 
-declaracion_multiple: ASIGNACION (ID | NRO_ENTERO) declaracion_multiple
+declaracion_multiple: ASIGNACION operacion_al declaracion_multiple
                     | COMA ID declaracion_multiple
                     |
                     ;
@@ -114,7 +114,7 @@ estructura_for: CTRL_FOR struct_for bloque;
 llamar_funcion: ID PAR_APER argumentos_de_funcion PAR_CIER;
 
 // Retornar un valor
-retorno: CTRL_RETURN (termino | );
+retorno: CTRL_RETURN (operacion_al | );
 
 // -------------------- [REGLAS AUXILIARES] --------------------
 
@@ -194,7 +194,7 @@ decrementar: ID MENOS MENOS
            ;
 
 // Definicion auxiliares para llamado de funciones
-argumentos_de_funcion: (ID | NRO_ENTERO)
+argumentos_de_funcion: (ID | NRO_ENTERO) argumento
                      |
                      ;
 

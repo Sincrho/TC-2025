@@ -1,12 +1,11 @@
 package proyectofinal2025;
 
-//import org.antlr.v4.runtime.tree.ParseTree;
-
-//import proyectofinal2025.ErrorHandler.ErrorHandler;
-
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
-// import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import proyectofinal2025.ErrorHandler.ErrorHandler;
+
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -16,32 +15,33 @@ public class App {
         System.out.println(input);
         
         // Inicializo lexer que se alimenta del CharStream de entrada
-        // programafinaltc2024Lexer lexer = new programafinaltc2024Lexer(input);
+        tpfinal2025Lexer lexer = new tpfinal2025Lexer(input);
         
         // Inicializo buffer de tokens a partir del lexer
-        // CommonTokenStream tokens = new CommonTokenStream(lexer);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
         
         // Inicializo parser que toma las tokens del buffer
-        // programafinaltc2024Parser parser = new programafinaltc2024Parser(tokens);
+        tpfinal2025Parser parser = new tpfinal2025Parser(tokens);
                 
         // Inicializo mi CustomListener
-        // programafinaltc2024BaseListener escucha = new CustomListener();
+        tpfinal2025BaseListener escucha = new CustomListener();
 
         // Conecto el Listener al parser
-        // parser.addParseListener(escucha);
+        parser.addParseListener(escucha);
 
         // Solicito al parser que comience indicando una regla gramatical
-        // ParseTree tree =  parser.programa();
+        ParseTree tree =  parser.programa();
 
-        //ErrorHandler logger = ErrorHandler.getInstance();
-        // Boolean errorListener = logger.isErrorFound();
+        // Incializo el logger de errores
+        ErrorHandler logger = ErrorHandler.getInstance();
+        Boolean errorListener = logger.isErrorFound();
 
-        // if (!errorListener){
-        //     System.out.println("No hubo errores en la etapa de listener");
-        //     CustomVisitor visitante = new CustomVisitor();
-        //     visitante.visit(tree);
-        //     //visitante.generateIntermediateCode();
-        // }  
+        if (!errorListener){
+            System.out.println("No hubo errores en la etapa de listener");
+            //CustomVisitor visitante = new CustomVisitor();
+            //visitante.visit(tree);
+            //visitante.generateIntermediateCode();
+        }  
 
         // Visualizar el arbol en numeros enteros
         //System.out.println(tree.toStringTree());

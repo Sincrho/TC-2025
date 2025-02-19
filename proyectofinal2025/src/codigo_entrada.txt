@@ -1,1 +1,35 @@
-test
+int alpha = 5+10;
+
+float beta = 12;
+
+double gamma = 7, yotta = 15;
+
+
+int add(int a, int b);
+
+int add(int a, int b) {
+    return a + b;
+}
+
+
+
+int main() {
+    int x = 5, y = 10;
+
+    add(x,y);
+
+    if(x != y || x == y){
+        return 1;
+    }
+
+    while(x != y){
+        add(x,y);    
+    }
+
+    for(int n = 0; n <= x; n++){
+        add(x,y);
+    }
+
+    return 0;
+}
+
