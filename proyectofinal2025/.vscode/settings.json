@@ -1,0 +1,18 @@
+{
+    "maven.view": "flat",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    // Generacion archivos ANTLR en el paquete Java
+    "antlr4.generation.mode": "external",
+    "antlr4.generation.visitors": true,
+    "name": "Debug ANTLR4 grammar",
+    "type": "antlr-debug",
+    "request": "launch",
+    // Archivo a parsear
+    "input": "src/codigo_entrada.txt",
+    // Simbolo inicial
+    "startRule": "programa",
+    // Muestra Arbol Sintactico
+    "printParseTree": true,
+    "visualParseTree": true,
+    "java.debug.settings.onBuildFailureProceed": true
+}

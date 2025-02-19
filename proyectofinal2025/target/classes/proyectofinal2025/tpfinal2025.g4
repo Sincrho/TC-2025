@@ -116,7 +116,6 @@ llamar_funcion: ID PAR_APER argumentos_de_funcion PAR_CIER;
 // Retornar un valor
 retorno: CTRL_RETURN (termino | );
 
-
 // -------------------- [REGLAS AUXILIARES] --------------------
 
 // Tipos de datos para variables numericas
@@ -202,5 +201,3 @@ argumentos_de_funcion: (ID | NRO_ENTERO)
 argumento: COMA (ID | NRO_ENTERO) argumento
          |
          ;
-
-                     
