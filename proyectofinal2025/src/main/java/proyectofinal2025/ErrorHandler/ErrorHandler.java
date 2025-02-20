@@ -15,7 +15,7 @@ public class ErrorHandler {
 
     public void logError(String errorLine, String errorDescription){
         errorFound = true;
-        System.out.println("[ERROR] [Line " + errorLine + "] - Description: " + errorDescription);
+        System.out.println("Error in Line: " + errorLine + " - Description: " + errorDescription);
     }
 
     public Boolean isErrorFound() {

@@ -12,7 +12,8 @@ public class App {
         // Inicializo CharStream que lee el archivo de entrada
         CharStream input = CharStreams.fromFileName("src/codigo_entrada.txt");
 
-        System.out.println(input);
+        // Logeo del texto de entrada 
+        //System.out.println(input);
         
         // Inicializo lexer que se alimenta del CharStream de entrada
         tpfinal2025Lexer lexer = new tpfinal2025Lexer(input);
@@ -44,10 +45,13 @@ public class App {
         }  
 
         // Visualizar el arbol en numeros enteros
-        //System.out.println(tree.toStringTree());
+        System.out.println("════ Arbol en numeros ═════\n");
+        System.out.println(tree.toStringTree());
+        System.out.println("═══════════════════════════\n");
+
         // Visualizar el arbol en modo texto
-        //System.out.println(tree.toStringTree(parser));
-
-
+        System.out.println("═════ Arbol en texto ══════\n");
+        System.out.println(tree.toStringTree(parser));
+        System.out.println("═══════════════════════════\n");
     }
 }

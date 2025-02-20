@@ -40,10 +40,6 @@ public class CustomListener extends tpfinal2025BaseListener{
         this.logger = ErrorHandler.getInstance();
     }
 
-    public ErrorHandler getLogger() {
-        return logger;
-    }
-
     @Override
     public void enterPrograma(ProgramaContext ctx) {
         System.out.println("═════ Inicio Listener ═════");
@@ -59,6 +55,34 @@ public class CustomListener extends tpfinal2025BaseListener{
     @Override 
     public void enterBloque(BloqueContext ctx) {
         symbolTable.addNewContext();
+
+        //Manejo del caso de que haya una declaracion de funcion con parametros
+        if (!(ctx.getParent() instanceof Definir_funcionContext)) {
+            return;
+        }
+
+        Definir_funcionContext functionCtx = (Definir_funcionContext) ctx.getParent();
+        
+        //Obtengo el nombre de la funcion
+        String functionToken = functionCtx.ID().getText().toUpperCase();
+        ID functionId = symbolTable.searchIDByToken(functionToken);
+
+        //Añadir parametros de la funcion a la tabla de simbolos si los hay 
+        addFunctionParametersToSymbolTable(functionId);
+    }
+
+    //Funcion auxiliar para el manejo de parametros de la funcion
+    private void addFunctionParametersToSymbolTable(ID functionId) {
+        if (!(functionId instanceof Function)) {
+            return;
+        }
+
+        Function function = (Function) functionId;
+
+        for (ID param : function.getFunctionParameters()) {
+            param.setInitialized(true);
+            symbolTable.addNewID(param);
+        }
     }
 
     @Override 
@@ -68,7 +92,7 @@ public class CustomListener extends tpfinal2025BaseListener{
 
     @Override public void exitAsignacion(AsignacionContext ctx) {
         //Aca debo validar si el ID al que le voy a asignar el valor ya esta presente en el contexto del programa
-        String tokenString = ctx.ID().getText();
+        String tokenString = ctx.ID().getText().toUpperCase();
         String tokenLine = String.valueOf(ctx.getStop().getLine());
 
         ID foundId = symbolTable.searchIDByToken(tokenString);
@@ -90,7 +114,7 @@ public class CustomListener extends tpfinal2025BaseListener{
         
         // Valido si factor tiene ID 
         if (idNode != null) {
-            String tokenString = ctx.ID().getText();
+            String tokenString = ctx.ID().getText().toUpperCase();
             String tokenLine = String.valueOf(ctx.getStop().getLine());
 
             ID foundId = symbolTable.searchIDByToken(tokenString);
@@ -115,7 +139,7 @@ public class CustomListener extends tpfinal2025BaseListener{
     @Override public void exitDeclaracion(DeclaracionContext ctx) {
         //Aca debo validar si el ID ya esta presente en el contexto del programa
         String tipoDatoString = ctx.tipo_de_dato().getText().toUpperCase();
-        String tokenString = ctx.ID().getText();
+        String tokenString = ctx.ID().getText().toUpperCase();
         String tokenLine = String.valueOf(ctx.getStop().getLine());
 
         ID foundId = symbolTable.searchIDByTokenLocalContext(tokenString);
@@ -143,7 +167,7 @@ public class CustomListener extends tpfinal2025BaseListener{
                     }
 
                     if (primerChild.equals(",")) {
-                        tokenString = declaracionMultiple.ID().getText();
+                        tokenString = declaracionMultiple.ID().getText().toUpperCase();
                         Variable newVariable = new Variable(tokenString, Tipos.valueOf(tipoDatoString), false, false);
                         symbolTable.addNewID(newVariable);    
                     }
@@ -158,8 +182,9 @@ public class CustomListener extends tpfinal2025BaseListener{
     @Override public void exitDeclarar_funcion(Declarar_funcionContext ctx) {
         //Aca debo validar si la funcion ya esta declarada en el contexto del programa
         String tipoDatoString = ctx.tipo_de_funcion().getText().toUpperCase();
-        String tokenString = ctx.ID().getText();
+        String tokenString = ctx.ID().getText().toUpperCase();
         String tokenLine = String.valueOf(ctx.getStop().getLine());
+        
         //Preparo donde almacenar los parametros
         LinkedList <Variable> functionParametersList = new LinkedList<Variable>();
 
@@ -201,14 +226,15 @@ public class CustomListener extends tpfinal2025BaseListener{
     @Override public void exitDefinir_funcion(Definir_funcionContext ctx) {
         //Aca debo validar si la funcion ya esta definida en el contexto del programa
         String tipoDatoString = ctx.tipo_de_funcion().getText().toUpperCase();
-        String tokenString = ctx.ID().getText();
+        String tokenString = ctx.ID().getText().toUpperCase();
         String tokenLine = String.valueOf(ctx.getStop().getLine());
 
         ID foundId = symbolTable.searchIDByToken(tokenString);
-        
+
         //Checkeo si la funcion ya fue declarada
         if(foundId != null){
             Function foundFunction = (Function) foundId;
+
             //Checkeo si la funcion ya fue definida
             if(foundFunction.isInitialized()){
                 String message = "Function" + tipoDatoString + " " + tokenString + "is already defined.";
@@ -216,7 +242,8 @@ public class CustomListener extends tpfinal2025BaseListener{
             }
             else {
                 foundFunction.setInitialized(true);
-            }           
+            }
+            
         }else {
             Parametros_de_funcionContext functionParameters = ctx.parametros_de_funcion();
             //Preparo donde almacenar los parametros
@@ -229,7 +256,7 @@ public class CustomListener extends tpfinal2025BaseListener{
                 // Cargo el primer parametro
                 String parameterTipoDato = functionParameters.tipo_de_dato().getText().toUpperCase();
                 String parameterID = functionParameters.ID().getText().toUpperCase();
-                Variable functionParameter = new Variable(parameterID, Tipos.valueOf(parameterTipoDato), false, false);
+                Variable functionParameter = new Variable(parameterID, Tipos.valueOf(parameterTipoDato), true, false);
                 functionParametersList.add(functionParameter);
                     
                 ParametroContext multipleParameters = functionParameters.parametro();
@@ -237,7 +264,7 @@ public class CustomListener extends tpfinal2025BaseListener{
                 while (multipleParameters.parametro() != null) {
                     parameterTipoDato = multipleParameters.tipo_de_dato().getText().toUpperCase();
                     parameterID = multipleParameters.ID().getText().toUpperCase();
-                    functionParameter = new Variable(parameterID, Tipos.valueOf(parameterTipoDato), false, false);
+                    functionParameter = new Variable(parameterID, Tipos.valueOf(parameterTipoDato), true, false);
                     functionParametersList.add(functionParameter);
                     // Con esto recorro en profundidad para encontrar los parametros
                     multipleParameters = multipleParameters.parametro();
@@ -252,7 +279,7 @@ public class CustomListener extends tpfinal2025BaseListener{
 
     @Override public void exitLlamar_funcion(Llamar_funcionContext ctx) { 
         //Aca debo validar si la funcion ya esta declarada y definida en el contexto del programa
-        String tokenString = ctx.ID().getText();
+        String tokenString = ctx.ID().getText().toUpperCase();
         String tokenLine = String.valueOf(ctx.getStop().getLine());
 
         ID foundId = symbolTable.searchIDByToken(tokenString);

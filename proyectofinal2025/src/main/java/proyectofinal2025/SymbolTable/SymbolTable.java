@@ -68,7 +68,7 @@ public class SymbolTable {
     @Override
     public String toString() {
         StringBuilder currentWorkingTableString = new StringBuilder();
-        currentWorkingTableString.append("════ Tabla de Simbolos ════\n");
+        currentWorkingTableString.append("══════ Symbol Table ═══════\n");
 
         for(int contextIndex = 0; contextIndex < getContextCount(); contextIndex++){
             currentWorkingTableString.append("Context " + (contextIndex+1) + ": \n" + "{ \n");
@@ -79,6 +79,8 @@ public class SymbolTable {
 
             currentWorkingTableString.append("} \n");
         }
+
+        currentWorkingTableString.append("═══════════════════════════\n");
 
         return currentWorkingTableString.toString();
     }
