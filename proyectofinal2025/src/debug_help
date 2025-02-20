@@ -1,0 +1,11 @@
+for (int i = 0; i < ctx.getChildCount(); i++) {
+            ParseTree child = ctx.getChild(i);
+
+            if (child instanceof TerminalNode) {
+                int tokenType = ((TerminalNode) child).getSymbol().getType();
+                System.out.println("Child " + i + ": Token = " + child.getText() + ", TokenType = " + tokenType);
+            } else if (child instanceof ParserRuleContext) {
+                int ruleIndex = ((ParserRuleContext) child).getRuleIndex();
+                System.out.println("Child " + i + ": Rule = " + child.getText() + ", RuleIndex = " + ruleIndex);
+            }
+        }

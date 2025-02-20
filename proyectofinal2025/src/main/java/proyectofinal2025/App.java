@@ -6,6 +6,10 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import proyectofinal2025.ErrorHandler.ErrorHandler;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -39,19 +43,28 @@ public class App {
 
         if (!errorListener){
             System.out.println("No hubo errores en la etapa de listener");
-            //CustomVisitor visitante = new CustomVisitor();
-            //visitante.visit(tree);
-            //visitante.generateIntermediateCode();
-        }  
+            CustomVisitor visitor = new CustomVisitor();
+            visitor.visit(tree);
+
+            String codigoIntermedioString = visitor.toString();
+            String filePath = "codigo_intermedio.txt";
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+                writer.write(codigoIntermedioString);
+                System.out.println("File 'codigo_intermedio.txt' saved successfully!");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         // Visualizar el arbol en numeros enteros
-        System.out.println("════ Arbol en numeros ═════\n");
-        System.out.println(tree.toStringTree());
-        System.out.println("═══════════════════════════\n");
+        //System.out.println("════ Arbol en numeros ═════\n");
+        //System.out.println(tree.toStringTree());
+        //System.out.println("═══════════════════════════\n");
 
         // Visualizar el arbol en modo texto
-        System.out.println("═════ Arbol en texto ══════\n");
-        System.out.println(tree.toStringTree(parser));
-        System.out.println("═══════════════════════════\n");
+        //System.out.println("═════ Arbol en texto ══════\n");
+        //System.out.println(tree.toStringTree(parser));
+        //System.out.println("═══════════════════════════\n");
     }
 }

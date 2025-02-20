@@ -1,0 +1,38 @@
+t0 = 5+10
+t1 = 12
+t2 = 7
+t3 = 15
+t4 = a
+t5 = b
+label l0
+t7 = a
+t8 = b
+push a+b
+pop t6
+label l1
+t10 = 5
+t11 = 10
+x = y
+push x
+push y
+jmp l0
+ifnjmp x!=y||x==y, l2
+push 1
+label l2
+label l3
+ifnjmp x!=y, l4
+push x
+push y
+jmp l0
+jmp l3
+label l4
+t12 = 0
+label l5
+ifnjmp n<=x,l6
+push x
+push y
+jmp l0
+jmp l5
+label l6
+push 0
+pop t9

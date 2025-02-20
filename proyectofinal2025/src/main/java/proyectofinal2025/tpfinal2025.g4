@@ -59,7 +59,7 @@ ID: (LETRA | '_')(LETRA | DIGITO | '_')*;
 WS: ([ \n\t\r]+) -> skip;
 
 // Inicio de reglas programa
-programa: instrucciones;
+programa: instrucciones EOF;
 
 // Definicion de recursiva de las instrucciones del programa
 instrucciones: instruccion instrucciones
